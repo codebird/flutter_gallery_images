@@ -1,4 +1,4 @@
-library gallery_images;
+library images_gallery;
 
 import 'package:flutter/material.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_images/gallery_images.dart';
+import 'package:images_gallery/images_gallery.dart';
 
 class Feed extends StatefulWidget {
   const Feed({Key? key}) : super(key: key);

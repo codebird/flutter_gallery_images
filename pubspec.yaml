@@ -1,4 +1,4 @@
-name: gallery_images
+name: images_gallery
 description: an easy way to display an images gallery in flutter, a bit like samsung's gallery
 version: 0.0.1
 repository: https://github.com/codebird/flutter_gallery_images.git
