@@ -36,8 +36,8 @@ class Gallery {
             child: Container(
               height: imagesPerRow > 1
                   ? height
-                  : thisImageSize[1] /
-                      (thisImageSize[0] / screenWithWithoutPadding),
+                  : thisImageSize![1] /
+                      (thisImageSize![0] / screenWithWithoutPadding),
               width: width,
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
