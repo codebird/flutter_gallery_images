@@ -12,14 +12,16 @@ class Gallery {
     context = buildContext;
     images = imageWithSizesMap;
   }
-  Widget normalGalleryImages(
+  // This function is called if imagesPerRow isn't 2
+  Widget _normalGalleryImages(
       {required Map<String, List<double>> images,
       required String pathOrUrl,
       String localOrRemote = 'local',
-      int imagesPerRow = 2,
+      int imagesPerRow = 3,
       double padding = 3}) {
     List<Widget> gallery = [];
     List<Widget> imageWidgets = [];
+    // Get screen width and subtract the padding, to calculate image width
     double screenWithWithoutPadding =
         MediaQuery.of(context).size.width - (imagesPerRow * 2 * padding);
     double width = (screenWithWithoutPadding) / imagesPerRow;
@@ -27,7 +29,6 @@ class Gallery {
     List<String> imageNames = images.keys.toList();
     for (int i = 0; i < imageNames.length; i++) {
       var thisImageSize = images[imageNames[i]];
-      print((thisImageSize![0] / screenWithWithoutPadding));
       imageWidgets.add(
         Center(
           child: Padding(
@@ -35,8 +36,8 @@ class Gallery {
             child: Container(
               height: imagesPerRow > 1
                   ? height
-                  : thisImageSize![1] /
-                      (thisImageSize![0] / screenWithWithoutPadding),
+                  : thisImageSize[1] /
+                      (thisImageSize[0] / screenWithWithoutPadding),
               width: width,
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
@@ -54,6 +55,7 @@ class Gallery {
           ),
         ),
       );
+
       if ((i + 1) % imagesPerRow == 0) {
         gallery.add(Row(
           children: imageWidgets,
@@ -61,6 +63,7 @@ class Gallery {
         imageWidgets = [];
       }
     }
+
     if (imageWidgets.isNotEmpty) {
       gallery.add(Row(
         children: imageWidgets,
@@ -74,6 +77,7 @@ class Gallery {
     );
   }
 
+  // This is the main function that will be called
   Widget galleryImages(
       {required String pathOrUrl,
       String localOrRemote = 'local',
@@ -82,7 +86,7 @@ class Gallery {
     localOrRemote = localOrRemote.toLowerCase();
     pathOrUrl = fixPathOrUrl(pathOrUrl);
     if (imagesPerRow != 2) {
-      return normalGalleryImages(
+      return _normalGalleryImages(
           images: images,
           imagesPerRow: imagesPerRow,
           padding: padding,
