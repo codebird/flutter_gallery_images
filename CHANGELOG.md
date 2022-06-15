@@ -1,3 +1,7 @@
+## 0.0.5
+
+* remove debug print
+
 ## 0.0.4
 
 * bug fix
