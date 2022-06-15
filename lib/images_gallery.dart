@@ -93,7 +93,7 @@ class Gallery {
           pathOrUrl: pathOrUrl,
           localOrRemote: localOrRemote);
     }
-    print(123);
+
     List<Widget> gallery = [];
     List<String> imageNames = images.keys.toList();
 
