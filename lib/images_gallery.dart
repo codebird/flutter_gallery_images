@@ -93,6 +93,7 @@ class Gallery {
           pathOrUrl: pathOrUrl,
           localOrRemote: localOrRemote);
     }
+    print(123);
     List<Widget> gallery = [];
     List<String> imageNames = images.keys.toList();
 
@@ -165,11 +166,11 @@ class Gallery {
                 padding: EdgeInsets.all(padding),
                 child: localOrRemote == 'remote'
                     ? Image.network(
-                        '$pathOrUrl$currentImage',
+                        '$pathOrUrl$nextImage',
                         fit: BoxFit.fill,
                       )
                     : Image.asset(
-                        '$pathOrUrl$currentImage',
+                        '$pathOrUrl$nextImage',
                         fit: BoxFit.fill,
                       ),
               ),

@@ -1,6 +1,10 @@
+## 0.0.4
+
+* bug fix
+
 ## 0.0.3
 
-* just a bit of refactoring.
+* just a bit of refactoring. (DON'T USE, it is bugged.)
 
 ## 0.0.2
 
