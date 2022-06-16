@@ -27,11 +27,15 @@ class _FeedState extends State<Feed> {
       'feed7.jpg': [3024, 3024],
     };
     return SafeArea(
-      child: Gallery(buildContext: context, imageWithSizesMap: images)
-          .galleryImages(
-              imagesPerRow: imagesPerRow,
-              pathOrUrl: 'lib/assets/images/',
-              localOrRemote: 'local'),
+      child: Gallery(
+        buildContext: context,
+        imageWithSizesMap: images,
+        totalSidesPadding:
+            48, // Sum of the left and right padding if any, defaults to 0
+      ).galleryImages(
+          imagesPerRow: imagesPerRow,
+          pathOrUrl: 'lib/assets/images/',
+          localOrRemote: 'local'),
     );
   }
 }

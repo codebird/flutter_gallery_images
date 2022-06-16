@@ -6,11 +6,15 @@ import 'package:flutter/material.dart';
 class Gallery {
   late final BuildContext context;
   late final Map<String, List<double>> images;
+  late final double remainingScreenWidth;
   Gallery(
       {required BuildContext buildContext,
-      required Map<String, List<double>> imageWithSizesMap}) {
+      required Map<String, List<double>> imageWithSizesMap,
+      double totalSidesPadding = 0}) {
     context = buildContext;
     images = imageWithSizesMap;
+    remainingScreenWidth =
+        MediaQuery.of(context).size.width - totalSidesPadding;
   }
   // This function is called if imagesPerRow isn't 2
   Widget _normalGalleryImages(
@@ -23,7 +27,7 @@ class Gallery {
     List<Widget> imageWidgets = [];
     // Get screen width and subtract the padding, to calculate image width
     double screenWithWithoutPadding =
-        MediaQuery.of(context).size.width - (imagesPerRow * 2 * padding);
+        remainingScreenWidth - (imagesPerRow * 2 * padding);
     double width = (screenWithWithoutPadding) / imagesPerRow;
     double height = width;
     List<String> imageNames = images.keys.toList();
@@ -78,11 +82,12 @@ class Gallery {
   }
 
   // This is the main function that will be called
-  Widget galleryImages(
-      {required String pathOrUrl,
-      String localOrRemote = 'local',
-      int imagesPerRow = 2,
-      double padding = 4}) {
+  Widget galleryImages({
+    required String pathOrUrl,
+    String localOrRemote = 'local',
+    int imagesPerRow = 2,
+    double padding = 4,
+  }) {
     localOrRemote = localOrRemote.toLowerCase();
     pathOrUrl = fixPathOrUrl(pathOrUrl);
     if (imagesPerRow != 2) {
@@ -113,13 +118,13 @@ class Gallery {
             getPositioning(images[currentImage]!, images[nextImage]!);
 
         if (positions.length == 2) {
-          imagesHeight = positions[1] /
-              (images[currentImage]![0] / MediaQuery.of(context).size.width);
+          imagesHeight =
+              positions[1] / (images[currentImage]![0] / remainingScreenWidth);
           gallery.add(
             Positioned(
               top: top,
               left: 0,
-              width: MediaQuery.of(context).size.width,
+              width: remainingScreenWidth,
               height: imagesHeight,
               child: Padding(
                 padding: EdgeInsets.all(padding),
@@ -140,7 +145,7 @@ class Gallery {
           gallery.add(Positioned(
             top: top,
             left: 0,
-            width: MediaQuery.of(context).size.width * positions[0],
+            width: remainingScreenWidth * positions[0],
             height: positions[2],
             child: Padding(
               padding: EdgeInsets.all(padding),
@@ -155,12 +160,12 @@ class Gallery {
                     ),
             ),
           ));
-          left = MediaQuery.of(context).size.width * positions[0];
+          left = remainingScreenWidth * positions[0];
           gallery.add(
             Positioned(
               top: top,
               left: left,
-              width: MediaQuery.of(context).size.width * positions[1],
+              width: remainingScreenWidth * positions[1],
               height: positions[2],
               child: Padding(
                 padding: EdgeInsets.all(padding),
@@ -186,10 +191,10 @@ class Gallery {
     }
     if (lastI == images.length - 1) {
       imagesHeight = images[imageNames.last]![1] /
-          (images[imageNames.last]![0] / (MediaQuery.of(context).size.width));
+          (images[imageNames.last]![0] / remainingScreenWidth);
       gallery.add(
         Positioned(
-          width: MediaQuery.of(context).size.width,
+          width: remainingScreenWidth,
           height: imagesHeight,
           top: top,
           left: 0,
@@ -227,10 +232,8 @@ class Gallery {
     if (isSquare(size1) && isSquare(size2) ||
         (isHorizontal(size1) && isHorizontal(size2)) ||
         (isVertical(size1) && isVertical(size2))) {
-      double firstHeight =
-          size1[1] / (size1[0] / (MediaQuery.of(context).size.width / 2));
-      double secondHeight =
-          size2[1] / (size2[0] / (MediaQuery.of(context).size.width / 2));
+      double firstHeight = size1[1] / (size1[0] / (remainingScreenWidth / 2));
+      double secondHeight = size2[1] / (size2[0] / (remainingScreenWidth / 2));
 
       return [
         0.5,
@@ -241,9 +244,9 @@ class Gallery {
 
     if ((isSquare(size1) || isHorizontal(size1)) && isVertical(size2)) {
       double firstHeight =
-          size1[1] / (size1[0] / (MediaQuery.of(context).size.width * 0.62));
+          size1[1] / (size1[0] / (remainingScreenWidth * 0.62));
       double secondHeight =
-          size2[1] / (size2[0] / (MediaQuery.of(context).size.width * 0.38));
+          size2[1] / (size2[0] / (remainingScreenWidth * 0.38));
       return [
         0.62,
         0.38,
@@ -253,9 +256,9 @@ class Gallery {
 
     if ((isSquare(size2) || isHorizontal(size2)) && isVertical(size1)) {
       double firstHeight =
-          size1[1] / (size1[0] / (MediaQuery.of(context).size.width * 0.38));
+          size1[1] / (size1[0] / (remainingScreenWidth * 0.38));
       double secondHeight =
-          size2[1] / (size2[0] / (MediaQuery.of(context).size.width / 0.62));
+          size2[1] / (size2[0] / (remainingScreenWidth / 0.62));
       return [
         0.38,
         0.62,

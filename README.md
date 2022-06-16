@@ -26,7 +26,11 @@ Map<String, List<double>> images = {
 };
 
 // Include this in the child of something else.
-Gallery(buildContext: context, imageWithSizesMap: images)
+Gallery(
+buildContext: context,
+imageWithSizesMap: images,
+totalSidesPadding: 48,// Sum of the left and right padding if any, defaults to 0
+)
 .galleryImages(
 imagesPerRow: imagesPerRow, pathOrUrl: 'lib/assets/images/', localOrRemote: 'local'),
 

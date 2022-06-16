@@ -1,3 +1,8 @@
+## 0.0.6
+
+* added the ability to have external padding. you can define totalSidePadding as the total of left
+* and right padding.
+
 ## 0.0.5
 
 * remove debug print
