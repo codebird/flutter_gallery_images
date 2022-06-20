@@ -7,10 +7,12 @@ class Gallery {
   late final BuildContext context;
   late final Map<String, List<double>> images;
   late final double remainingScreenWidth;
+  late final Function? callBack;
   Gallery(
       {required BuildContext buildContext,
       required Map<String, List<double>> imageWithSizesMap,
-      double totalSidesPadding = 0}) {
+      double totalSidesPadding = 0,
+      this.callBack}) {
     context = buildContext;
     images = imageWithSizesMap;
     remainingScreenWidth =
@@ -33,32 +35,39 @@ class Gallery {
     List<String> imageNames = images.keys.toList();
     for (int i = 0; i < imageNames.length; i++) {
       var thisImageSize = images[imageNames[i]];
-      imageWidgets.add(
-        Center(
-          child: Padding(
-            padding: EdgeInsets.all(padding),
-            child: Container(
-              height: imagesPerRow > 1
-                  ? height
-                  : thisImageSize![1] /
-                      (thisImageSize![0] / screenWithWithoutPadding),
-              width: width,
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: isVertical(thisImageSize!) || imagesPerRow == 1
-                      ? BoxFit.fitWidth
-                      : BoxFit.fitHeight,
-                  image: localOrRemote == 'remote'
-                      ? NetworkImage('$pathOrUrl${imageNames[i]}')
-                      : AssetImage('$pathOrUrl${imageNames[i]}')
-                          as ImageProvider,
-                ),
+      var imageWidget = Center(
+        child: Padding(
+          padding: EdgeInsets.all(padding),
+          child: Container(
+            height: imagesPerRow > 1
+                ? height
+                : thisImageSize![1] /
+                    (thisImageSize![0] / screenWithWithoutPadding),
+            width: width,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: isVertical(thisImageSize!) || imagesPerRow == 1
+                    ? BoxFit.fitWidth
+                    : BoxFit.fitHeight,
+                image: localOrRemote == 'remote'
+                    ? NetworkImage('$pathOrUrl${imageNames[i]}')
+                    : AssetImage('$pathOrUrl${imageNames[i]}') as ImageProvider,
               ),
             ),
           ),
         ),
       );
+      if (callBack != null) {
+        imageWidgets.add(GestureDetector(
+          onTap: () {
+            callBack!("$pathOrUrl${imageNames[i]}");
+          },
+          child: imageWidget,
+        ));
+      } else {
+        imageWidgets.add(imageWidget);
+      }
 
       if ((i + 1) % imagesPerRow == 0) {
         gallery.add(Row(
@@ -120,67 +129,116 @@ class Gallery {
         if (positions.length == 2) {
           imagesHeight =
               positions[1] / (images[currentImage]![0] / remainingScreenWidth);
-          gallery.add(
-            Positioned(
-              top: top,
-              left: 0,
-              width: remainingScreenWidth,
-              height: imagesHeight,
-              child: Padding(
-                padding: EdgeInsets.all(padding),
-                child: localOrRemote == 'remote'
-                    ? Image.network(
-                        '$pathOrUrl$currentImage',
-                        fit: BoxFit.fill,
-                      )
-                    : Image.asset(
-                        '$pathOrUrl$currentImage',
-                        fit: BoxFit.fill,
-                      ),
-              ),
-            ),
+          var imageWidget = Padding(
+            padding: EdgeInsets.all(padding),
+            child: localOrRemote == 'remote'
+                ? Image.network(
+                    '$pathOrUrl$currentImage',
+                    fit: BoxFit.fill,
+                  )
+                : Image.asset(
+                    '$pathOrUrl$currentImage',
+                    fit: BoxFit.fill,
+                  ),
           );
+          if (callBack != null) {
+            gallery.add(
+              Positioned(
+                top: top,
+                left: 0,
+                width: remainingScreenWidth,
+                height: imagesHeight,
+                child: GestureDetector(
+                  onTap: () {
+                    callBack!("$pathOrUrl$currentImage");
+                  },
+                  child: imageWidget,
+                ),
+              ),
+            );
+          } else {
+            gallery.add(
+              Positioned(
+                  top: top,
+                  left: 0,
+                  width: remainingScreenWidth,
+                  height: imagesHeight,
+                  child: imageWidget),
+            );
+          }
           top += imagesHeight;
         } else {
-          gallery.add(Positioned(
-            top: top,
-            left: 0,
-            width: remainingScreenWidth * positions[0],
-            height: positions[2],
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child: localOrRemote == 'remote'
-                  ? Image.network(
-                      '$pathOrUrl$currentImage',
-                      fit: BoxFit.fill,
-                    )
-                  : Image.asset(
-                      '$pathOrUrl$currentImage',
-                      fit: BoxFit.fill,
-                    ),
-            ),
-          ));
+          var imageWidget = Padding(
+            padding: EdgeInsets.all(padding),
+            child: localOrRemote == 'remote'
+                ? Image.network(
+                    '$pathOrUrl$currentImage',
+                    fit: BoxFit.fill,
+                  )
+                : Image.asset(
+                    '$pathOrUrl$currentImage',
+                    fit: BoxFit.fill,
+                  ),
+          );
+          if (callBack != null) {
+            gallery.add(Positioned(
+              top: top,
+              left: 0,
+              width: remainingScreenWidth * positions[0],
+              height: positions[2],
+              child: GestureDetector(
+                onTap: () {
+                  callBack!("$pathOrUrl$currentImage");
+                },
+                child: imageWidget,
+              ),
+            ));
+          } else {
+            gallery.add(
+              Positioned(
+                  top: top,
+                  left: 0,
+                  width: remainingScreenWidth * positions[0],
+                  height: positions[2],
+                  child: imageWidget),
+            );
+          }
           left = remainingScreenWidth * positions[0];
-          gallery.add(
-            Positioned(
+          imageWidget = Padding(
+            padding: EdgeInsets.all(padding),
+            child: localOrRemote == 'remote'
+                ? Image.network(
+                    '$pathOrUrl$nextImage',
+                    fit: BoxFit.fill,
+                  )
+                : Image.asset(
+                    '$pathOrUrl$nextImage',
+                    fit: BoxFit.fill,
+                  ),
+          );
+          if (callBack != null) {
+            gallery.add(Positioned(
               top: top,
               left: left,
               width: remainingScreenWidth * positions[1],
               height: positions[2],
-              child: Padding(
-                padding: EdgeInsets.all(padding),
-                child: localOrRemote == 'remote'
-                    ? Image.network(
-                        '$pathOrUrl$nextImage',
-                        fit: BoxFit.fill,
-                      )
-                    : Image.asset(
-                        '$pathOrUrl$nextImage',
-                        fit: BoxFit.fill,
-                      ),
+              child: GestureDetector(
+                onTap: () {
+                  callBack!("$pathOrUrl$nextImage");
+                },
+                child: imageWidget,
               ),
-            ),
-          );
+            ));
+          } else {
+            gallery.add(
+              Positioned(
+                  top: top,
+                  left: left,
+                  width: remainingScreenWidth * positions[1],
+                  height: positions[2],
+                  child: imageWidget),
+            );
+          }
           left = 0;
           top += positions[2];
           calcTotalHeight += top;
@@ -192,23 +250,39 @@ class Gallery {
     if (lastI == images.length - 1) {
       imagesHeight = images[imageNames.last]![1] /
           (images[imageNames.last]![0] / remainingScreenWidth);
-      gallery.add(
-        Positioned(
+      var imageWidget = localOrRemote == 'remote'
+          ? Image.network(
+              '$pathOrUrl${imageNames.last}',
+              fit: BoxFit.fill,
+            )
+          : Image.asset(
+              '$pathOrUrl${imageNames.last}',
+              fit: BoxFit.fill,
+            );
+      if (callBack != null) {
+        gallery.add(Positioned(
           width: remainingScreenWidth,
           height: imagesHeight,
           top: top,
           left: 0,
-          child: localOrRemote == 'remote'
-              ? Image.network(
-                  '$pathOrUrl${imageNames.last}',
-                  fit: BoxFit.fill,
-                )
-              : Image.asset(
-                  '$pathOrUrl${imageNames.last}',
-                  fit: BoxFit.fill,
-                ),
-        ),
-      );
+          child: GestureDetector(
+            onTap: () {
+              callBack!("$pathOrUrl${imageNames.last}");
+            },
+            child: imageWidget,
+          ),
+        ));
+      } else {
+        gallery.add(
+          Positioned(
+            width: remainingScreenWidth,
+            height: imagesHeight,
+            top: top,
+            left: 0,
+            child: imageWidget,
+          ),
+        );
+      }
       calcTotalHeight = top + imagesHeight;
     }
     gallery.add(Container(

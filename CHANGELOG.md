@@ -1,3 +1,8 @@
+## 0.0.7
+
+* added the ability to set a callback function on images tap, when an image is tapped, the 
+* callback function will be called with the path of the tapped image as a string.
+
 ## 0.0.6
 
 * added the ability to have external padding. you can define totalSidePadding as the total of left
