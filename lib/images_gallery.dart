@@ -1,17 +1,21 @@
 library images_gallery;
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 /// A Gallery Display.
 class Gallery {
   late final BuildContext context;
   late final Map<String, List<double>> images;
+  late final Map<String, String> imagesBase64;
   late final double remainingScreenWidth;
   late final Function? callBack;
   Gallery(
       {required BuildContext buildContext,
       required Map<String, List<double>> imageWithSizesMap,
       double totalSidesPadding = 0,
+      this.imagesBase64 = const {},
       this.callBack}) {
     context = buildContext;
     images = imageWithSizesMap;
@@ -52,7 +56,11 @@ class Gallery {
                     : BoxFit.fitHeight,
                 image: localOrRemote == 'remote'
                     ? NetworkImage('$pathOrUrl${imageNames[i]}')
-                    : AssetImage('$pathOrUrl${imageNames[i]}') as ImageProvider,
+                    : imagesBase64.keys.contains(imageNames[i])
+                        ? MemoryImage(
+                            base64Decode(imagesBase64[imageNames[i]]!))
+                        : AssetImage('$pathOrUrl${imageNames[i]}')
+                            as ImageProvider,
               ),
             ),
           ),
@@ -136,10 +144,12 @@ class Gallery {
                     '$pathOrUrl$currentImage',
                     fit: BoxFit.fill,
                   )
-                : Image.asset(
-                    '$pathOrUrl$currentImage',
-                    fit: BoxFit.fill,
-                  ),
+                : imagesBase64.keys.contains(currentImage)
+                    ? Image.memory(base64Decode(imagesBase64[currentImage]!))
+                    : Image.asset(
+                        '$pathOrUrl$currentImage',
+                        fit: BoxFit.fill,
+                      ),
           );
           if (callBack != null) {
             gallery.add(
@@ -175,10 +185,12 @@ class Gallery {
                     '$pathOrUrl$currentImage',
                     fit: BoxFit.fill,
                   )
-                : Image.asset(
-                    '$pathOrUrl$currentImage',
-                    fit: BoxFit.fill,
-                  ),
+                : imagesBase64.keys.contains(currentImage)
+                    ? Image.memory(base64Decode(imagesBase64[currentImage]!))
+                    : Image.asset(
+                        '$pathOrUrl$currentImage',
+                        fit: BoxFit.fill,
+                      ),
           );
           if (callBack != null) {
             gallery.add(Positioned(
@@ -211,10 +223,12 @@ class Gallery {
                     '$pathOrUrl$nextImage',
                     fit: BoxFit.fill,
                   )
-                : Image.asset(
-                    '$pathOrUrl$nextImage',
-                    fit: BoxFit.fill,
-                  ),
+                : imagesBase64.keys.contains(nextImage)
+                    ? Image.memory(base64Decode(imagesBase64[nextImage]!))
+                    : Image.asset(
+                        '$pathOrUrl$nextImage',
+                        fit: BoxFit.fill,
+                      ),
           );
           if (callBack != null) {
             gallery.add(Positioned(
@@ -255,10 +269,12 @@ class Gallery {
               '$pathOrUrl${imageNames.last}',
               fit: BoxFit.fill,
             )
-          : Image.asset(
-              '$pathOrUrl${imageNames.last}',
-              fit: BoxFit.fill,
-            );
+          : imagesBase64.keys.contains(imageNames.last)
+              ? Image.memory(base64Decode(imagesBase64[imageNames.last]!))
+              : Image.asset(
+                  '$pathOrUrl${imageNames.last}',
+                  fit: BoxFit.fill,
+                );
       if (callBack != null) {
         gallery.add(Positioned(
           width: remainingScreenWidth,
