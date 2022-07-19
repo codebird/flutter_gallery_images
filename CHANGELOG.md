@@ -1,3 +1,8 @@
+## 0.0.8
+
+* added base64 support.
+
+
 ## 0.0.7
 
 * added the ability to set a callback function on images tap, when an image is tapped, the 

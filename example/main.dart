@@ -26,6 +26,10 @@ class _FeedState extends State<Feed> {
       'feed6.jpg': [3024, 3024],
       'feed7.jpg': [3024, 3024],
     };
+    // If some images are base64 you can send them in this dictionary where the key
+    // is the same as images dictionary and the value is the base64 string
+    Map<String, String> imagesBase64 = {'feed8.jpg': 'Some BASE64 string'};
+
     void callbackFunctionName(String newPath) {
       //Do something with the imagePath newPath
     }
@@ -34,10 +38,13 @@ class _FeedState extends State<Feed> {
       child: Gallery(
               buildContext: context,
               imageWithSizesMap: images,
+              imagesBase64: imagesBase64, // send base64 images here
               totalSidesPadding:
                   48, // Sum of the left and right padding if any, defaults to 0
               callBack:
-                  callbackFunctionName) //callback function will be called with a String of the path of the clicked image
+                  //callback function will be called with a String of the path of the clicked image,
+                  // if the image is base64, the base 64 string will be sent to the callback
+                  callbackFunctionName)
           .galleryImages(
               imagesPerRow: imagesPerRow,
               pathOrUrl: 'lib/assets/images/',

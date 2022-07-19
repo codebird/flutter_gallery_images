@@ -54,11 +54,10 @@ class Gallery {
                 fit: isVertical(thisImageSize!) || imagesPerRow == 1
                     ? BoxFit.fitWidth
                     : BoxFit.fitHeight,
-                image: localOrRemote == 'remote'
-                    ? NetworkImage('$pathOrUrl${imageNames[i]}')
-                    : imagesBase64.keys.contains(imageNames[i])
-                        ? MemoryImage(
-                            base64Decode(imagesBase64[imageNames[i]]!))
+                image: imagesBase64.keys.contains(imageNames[i])
+                    ? MemoryImage(base64Decode(imagesBase64[imageNames[i]]!))
+                    : localOrRemote == 'remote'
+                        ? NetworkImage('$pathOrUrl${imageNames[i]}')
                         : AssetImage('$pathOrUrl${imageNames[i]}')
                             as ImageProvider,
               ),
@@ -69,7 +68,11 @@ class Gallery {
       if (callBack != null) {
         imageWidgets.add(GestureDetector(
           onTap: () {
-            callBack!("$pathOrUrl${imageNames[i]}");
+            if (imagesBase64.keys.contains(imageNames[i])) {
+              callBack!(imagesBase64[imageNames[i]]);
+            } else {
+              callBack!("$pathOrUrl${imageNames[i]}");
+            }
           },
           child: imageWidget,
         ));
@@ -139,13 +142,13 @@ class Gallery {
               positions[1] / (images[currentImage]![0] / remainingScreenWidth);
           var imageWidget = Padding(
             padding: EdgeInsets.all(padding),
-            child: localOrRemote == 'remote'
-                ? Image.network(
-                    '$pathOrUrl$currentImage',
-                    fit: BoxFit.fill,
-                  )
-                : imagesBase64.keys.contains(currentImage)
-                    ? Image.memory(base64Decode(imagesBase64[currentImage]!))
+            child: imagesBase64.keys.contains(currentImage)
+                ? Image.memory(base64Decode(imagesBase64[currentImage]!))
+                : localOrRemote == 'remote'
+                    ? Image.network(
+                        '$pathOrUrl$currentImage',
+                        fit: BoxFit.fill,
+                      )
                     : Image.asset(
                         '$pathOrUrl$currentImage',
                         fit: BoxFit.fill,
@@ -160,7 +163,11 @@ class Gallery {
                 height: imagesHeight,
                 child: GestureDetector(
                   onTap: () {
-                    callBack!("$pathOrUrl$currentImage");
+                    if (imagesBase64.keys.contains(currentImage)) {
+                      callBack!(imagesBase64[currentImage]);
+                    } else {
+                      callBack!("$pathOrUrl$currentImage");
+                    }
                   },
                   child: imageWidget,
                 ),
@@ -180,13 +187,13 @@ class Gallery {
         } else {
           var imageWidget = Padding(
             padding: EdgeInsets.all(padding),
-            child: localOrRemote == 'remote'
-                ? Image.network(
-                    '$pathOrUrl$currentImage',
-                    fit: BoxFit.fill,
-                  )
-                : imagesBase64.keys.contains(currentImage)
-                    ? Image.memory(base64Decode(imagesBase64[currentImage]!))
+            child: imagesBase64.keys.contains(currentImage)
+                ? Image.memory(base64Decode(imagesBase64[currentImage]!))
+                : localOrRemote == 'remote'
+                    ? Image.network(
+                        '$pathOrUrl$currentImage',
+                        fit: BoxFit.fill,
+                      )
                     : Image.asset(
                         '$pathOrUrl$currentImage',
                         fit: BoxFit.fill,
@@ -200,7 +207,11 @@ class Gallery {
               height: positions[2],
               child: GestureDetector(
                 onTap: () {
-                  callBack!("$pathOrUrl$currentImage");
+                  if (imagesBase64.keys.contains(currentImage)) {
+                    callBack!(imagesBase64[currentImage]);
+                  } else {
+                    callBack!("$pathOrUrl$currentImage");
+                  }
                 },
                 child: imageWidget,
               ),
@@ -218,13 +229,13 @@ class Gallery {
           left = remainingScreenWidth * positions[0];
           imageWidget = Padding(
             padding: EdgeInsets.all(padding),
-            child: localOrRemote == 'remote'
-                ? Image.network(
-                    '$pathOrUrl$nextImage',
-                    fit: BoxFit.fill,
-                  )
-                : imagesBase64.keys.contains(nextImage)
-                    ? Image.memory(base64Decode(imagesBase64[nextImage]!))
+            child: imagesBase64.keys.contains(nextImage)
+                ? Image.memory(base64Decode(imagesBase64[nextImage]!))
+                : localOrRemote == 'remote'
+                    ? Image.network(
+                        '$pathOrUrl$nextImage',
+                        fit: BoxFit.fill,
+                      )
                     : Image.asset(
                         '$pathOrUrl$nextImage',
                         fit: BoxFit.fill,
@@ -238,7 +249,11 @@ class Gallery {
               height: positions[2],
               child: GestureDetector(
                 onTap: () {
-                  callBack!("$pathOrUrl$nextImage");
+                  if (imagesBase64.keys.contains(nextImage)) {
+                    callBack!(imagesBase64[nextImage]);
+                  } else {
+                    callBack!("$pathOrUrl$nextImage");
+                  }
                 },
                 child: imageWidget,
               ),
@@ -264,13 +279,13 @@ class Gallery {
     if (lastI == images.length - 1) {
       imagesHeight = images[imageNames.last]![1] /
           (images[imageNames.last]![0] / remainingScreenWidth);
-      var imageWidget = localOrRemote == 'remote'
-          ? Image.network(
-              '$pathOrUrl${imageNames.last}',
-              fit: BoxFit.fill,
-            )
-          : imagesBase64.keys.contains(imageNames.last)
-              ? Image.memory(base64Decode(imagesBase64[imageNames.last]!))
+      var imageWidget = imagesBase64.keys.contains(imageNames.last)
+          ? Image.memory(base64Decode(imagesBase64[imageNames.last]!))
+          : localOrRemote == 'remote'
+              ? Image.network(
+                  '$pathOrUrl${imageNames.last}',
+                  fit: BoxFit.fill,
+                )
               : Image.asset(
                   '$pathOrUrl${imageNames.last}',
                   fit: BoxFit.fill,
@@ -283,7 +298,11 @@ class Gallery {
           left: 0,
           child: GestureDetector(
             onTap: () {
-              callBack!("$pathOrUrl${imageNames.last}");
+              if (imagesBase64.keys.contains(imageNames.last)) {
+                callBack!(imagesBase64[imageNames.last]);
+              } else {
+                callBack!("$pathOrUrl${imageNames.last}");
+              }
             },
             child: imageWidget,
           ),
