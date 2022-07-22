@@ -43,6 +43,8 @@ class Gallery {
         child: Padding(
           padding: EdgeInsets.all(padding),
           child: Container(
+            alignment: Alignment.bottomCenter,
+            child: Text("Hello"),
             height: imagesPerRow > 1
                 ? height
                 : thisImageSize![1] /
@@ -140,19 +142,20 @@ class Gallery {
         if (positions.length == 2) {
           imagesHeight =
               positions[1] / (images[currentImage]![0] / remainingScreenWidth);
-          var imageWidget = Padding(
-            padding: EdgeInsets.all(padding),
-            child: imagesBase64.keys.contains(currentImage)
-                ? Image.memory(base64Decode(imagesBase64[currentImage]!))
-                : localOrRemote == 'remote'
-                    ? Image.network(
-                        '$pathOrUrl$currentImage',
-                        fit: BoxFit.fill,
-                      )
-                    : Image.asset(
-                        '$pathOrUrl$currentImage',
-                        fit: BoxFit.fill,
-                      ),
+          var imageWidget = Container(
+            alignment: Alignment.bottomCenter,
+            child: Text("HELLO"),
+            margin: EdgeInsets.all(padding),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imagesBase64.keys.contains(currentImage)
+                    ? MemoryImage(base64Decode(imagesBase64[currentImage]!))
+                    : localOrRemote == 'remote'
+                        ? NetworkImage('$pathOrUrl$currentImage')
+                        : AssetImage('$pathOrUrl$currentImage')
+                            as ImageProvider,
+              ),
+            ),
           );
           if (callBack != null) {
             gallery.add(
@@ -185,19 +188,20 @@ class Gallery {
           }
           top += imagesHeight;
         } else {
-          var imageWidget = Padding(
-            padding: EdgeInsets.all(padding),
-            child: imagesBase64.keys.contains(currentImage)
-                ? Image.memory(base64Decode(imagesBase64[currentImage]!))
-                : localOrRemote == 'remote'
-                    ? Image.network(
-                        '$pathOrUrl$currentImage',
-                        fit: BoxFit.fill,
-                      )
-                    : Image.asset(
-                        '$pathOrUrl$currentImage',
-                        fit: BoxFit.fill,
-                      ),
+          var imageWidget = Container(
+            alignment: Alignment.bottomCenter,
+            child: Text("HELLO"),
+            margin: EdgeInsets.all(padding),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imagesBase64.keys.contains(currentImage)
+                    ? MemoryImage(base64Decode(imagesBase64[currentImage]!))
+                    : localOrRemote == 'remote'
+                        ? NetworkImage('$pathOrUrl$currentImage')
+                        : AssetImage('$pathOrUrl$currentImage')
+                            as ImageProvider,
+              ),
+            ),
           );
           if (callBack != null) {
             gallery.add(Positioned(
@@ -227,19 +231,19 @@ class Gallery {
             );
           }
           left = remainingScreenWidth * positions[0];
-          imageWidget = Padding(
-            padding: EdgeInsets.all(padding),
-            child: imagesBase64.keys.contains(nextImage)
-                ? Image.memory(base64Decode(imagesBase64[nextImage]!))
-                : localOrRemote == 'remote'
-                    ? Image.network(
-                        '$pathOrUrl$nextImage',
-                        fit: BoxFit.fill,
-                      )
-                    : Image.asset(
-                        '$pathOrUrl$nextImage',
-                        fit: BoxFit.fill,
-                      ),
+          imageWidget = Container(
+            alignment: Alignment.bottomCenter,
+            child: Text("HELLO"),
+            margin: EdgeInsets.all(padding),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imagesBase64.keys.contains(nextImage)
+                    ? MemoryImage(base64Decode(imagesBase64[nextImage]!))
+                    : localOrRemote == 'remote'
+                        ? NetworkImage('$pathOrUrl$nextImage')
+                        : AssetImage('$pathOrUrl$nextImage') as ImageProvider,
+              ),
+            ),
           );
           if (callBack != null) {
             gallery.add(Positioned(
@@ -279,17 +283,21 @@ class Gallery {
     if (lastI == images.length - 1) {
       imagesHeight = images[imageNames.last]![1] /
           (images[imageNames.last]![0] / remainingScreenWidth);
-      var imageWidget = imagesBase64.keys.contains(imageNames.last)
-          ? Image.memory(base64Decode(imagesBase64[imageNames.last]!))
-          : localOrRemote == 'remote'
-              ? Image.network(
-                  '$pathOrUrl${imageNames.last}',
-                  fit: BoxFit.fill,
-                )
-              : Image.asset(
-                  '$pathOrUrl${imageNames.last}',
-                  fit: BoxFit.fill,
-                );
+      var imageWidget = Container(
+        alignment: Alignment.bottomCenter,
+        child: Text("HELLO"),
+        margin: EdgeInsets.all(padding),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: imagesBase64.keys.contains(imageNames.last)
+                ? MemoryImage(base64Decode(imagesBase64[imageNames.last]!))
+                : localOrRemote == 'remote'
+                    ? NetworkImage('$pathOrUrl${imageNames.last}')
+                    : AssetImage('$pathOrUrl${imageNames.last}')
+                        as ImageProvider,
+          ),
+        ),
+      );
       if (callBack != null) {
         gallery.add(Positioned(
           width: remainingScreenWidth,
