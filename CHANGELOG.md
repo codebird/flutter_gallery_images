@@ -1,3 +1,8 @@
+## 0.0.9
+
+* add the ability to add a widget above the image.
+
+
 ## 0.0.8
 
 * added base64 support.

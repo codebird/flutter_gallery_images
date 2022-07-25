@@ -29,6 +29,14 @@ class _FeedState extends State<Feed> {
     // If some images are base64 you can send them in this dictionary where the key
     // is the same as images dictionary and the value is the base64 string
     Map<String, String> imagesBase64 = {'feed8.jpg': 'Some BASE64 string'};
+    Map<String, Widget> imagesChildren = {
+      'feed8.jpg': Container(
+        child: Text('Play as you like'),
+      )
+    };
+    Map<String, Alignment> childrenAlignment = {
+      'feed8.jpg': Alignment.bottomCenter
+    };
 
     void callbackFunctionName(String newPath) {
       //Do something with the imagePath newPath
@@ -38,7 +46,11 @@ class _FeedState extends State<Feed> {
       child: Gallery(
               buildContext: context,
               imageWithSizesMap: images,
-              imagesBase64: imagesBase64, // send base64 images here
+              imagesBase64: imagesBase64, // send base64 images here (optional)
+              imagesChildren:
+                  imagesChildren, // if you need to add a layer above the image, a title or something (optional)
+              childrenAlignment:
+                  childrenAlignment, // if children are provided, alignment can be controlled, default Alignment.bottomCenter (optional)
               totalSidesPadding:
                   48, // Sum of the left and right padding if any, defaults to 0
               callBack:

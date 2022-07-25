@@ -9,6 +9,8 @@ class Gallery {
   late final BuildContext context;
   late final Map<String, List<double>> images;
   late final Map<String, String> imagesBase64;
+  late final Map<String, Widget> imagesChildren;
+  late final Map<String, Alignment> childrenAlignment;
   late final double remainingScreenWidth;
   late final Function? callBack;
   Gallery(
@@ -16,6 +18,8 @@ class Gallery {
       required Map<String, List<double>> imageWithSizesMap,
       double totalSidesPadding = 0,
       this.imagesBase64 = const {},
+      this.imagesChildren = const {},
+      this.childrenAlignment = const {},
       this.callBack}) {
     context = buildContext;
     images = imageWithSizesMap;
@@ -43,8 +47,9 @@ class Gallery {
         child: Padding(
           padding: EdgeInsets.all(padding),
           child: Container(
-            alignment: Alignment.bottomCenter,
-            child: Text("Hello"),
+            alignment: childrenAlignment.keys.contains(imageNames[i])
+                ? childrenAlignment[imageNames[i]]
+                : Alignment.bottomCenter,
             height: imagesPerRow > 1
                 ? height
                 : thisImageSize![1] /
@@ -64,6 +69,9 @@ class Gallery {
                             as ImageProvider,
               ),
             ),
+            child: imagesChildren.keys.contains(imageNames[i])
+                ? imagesChildren[imageNames[i]]
+                : Container(),
           ),
         ),
       );
@@ -143,8 +151,9 @@ class Gallery {
           imagesHeight =
               positions[1] / (images[currentImage]![0] / remainingScreenWidth);
           var imageWidget = Container(
-            alignment: Alignment.bottomCenter,
-            child: Text("HELLO"),
+            alignment: childrenAlignment.keys.contains(currentImage)
+                ? childrenAlignment[currentImage]
+                : Alignment.bottomCenter,
             margin: EdgeInsets.all(padding),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -156,6 +165,9 @@ class Gallery {
                             as ImageProvider,
               ),
             ),
+            child: imagesChildren.keys.contains(currentImage)
+                ? imagesChildren[currentImage]
+                : Container(),
           );
           if (callBack != null) {
             gallery.add(
@@ -189,8 +201,9 @@ class Gallery {
           top += imagesHeight;
         } else {
           var imageWidget = Container(
-            alignment: Alignment.bottomCenter,
-            child: Text("HELLO"),
+            alignment: childrenAlignment.keys.contains(currentImage)
+                ? childrenAlignment[currentImage]
+                : Alignment.bottomCenter,
             margin: EdgeInsets.all(padding),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -202,6 +215,9 @@ class Gallery {
                             as ImageProvider,
               ),
             ),
+            child: imagesChildren.keys.contains(currentImage)
+                ? imagesChildren[currentImage]
+                : Container(),
           );
           if (callBack != null) {
             gallery.add(Positioned(
@@ -232,8 +248,9 @@ class Gallery {
           }
           left = remainingScreenWidth * positions[0];
           imageWidget = Container(
-            alignment: Alignment.bottomCenter,
-            child: Text("HELLO"),
+            alignment: childrenAlignment.keys.contains(nextImage)
+                ? childrenAlignment[nextImage]
+                : Alignment.bottomCenter,
             margin: EdgeInsets.all(padding),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -244,6 +261,9 @@ class Gallery {
                         : AssetImage('$pathOrUrl$nextImage') as ImageProvider,
               ),
             ),
+            child: imagesChildren.keys.contains(nextImage)
+                ? imagesChildren[nextImage]
+                : Container(),
           );
           if (callBack != null) {
             gallery.add(Positioned(
@@ -284,8 +304,9 @@ class Gallery {
       imagesHeight = images[imageNames.last]![1] /
           (images[imageNames.last]![0] / remainingScreenWidth);
       var imageWidget = Container(
-        alignment: Alignment.bottomCenter,
-        child: Text("HELLO"),
+        alignment: childrenAlignment.keys.contains(imageNames.last)
+            ? childrenAlignment[imageNames.last]
+            : Alignment.bottomCenter,
         margin: EdgeInsets.all(padding),
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -297,6 +318,9 @@ class Gallery {
                         as ImageProvider,
           ),
         ),
+        child: imagesChildren.keys.contains(imageNames.last)
+            ? imagesChildren[imageNames.last]
+            : Container(),
       );
       if (callBack != null) {
         gallery.add(Positioned(
