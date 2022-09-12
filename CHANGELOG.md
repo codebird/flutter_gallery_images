@@ -1,3 +1,7 @@
+## 0.0.91
+
+* if image name starts with http:// or https:// always load a network image.
+
 ## 0.0.9
 
 * add the ability to add a widget above the image.
