@@ -63,7 +63,9 @@ class Gallery {
                     : BoxFit.fitHeight,
                 image: imagesBase64.keys.contains(imageNames[i])
                     ? MemoryImage(base64Decode(imagesBase64[imageNames[i]]!))
-                    : localOrRemote == 'remote'
+                    : localOrRemote == 'remote' ||
+                            imageNames[i].startsWith("http://") ||
+                            imageNames[i].startsWith("https://")
                         ? NetworkImage('$pathOrUrl${imageNames[i]}')
                         : AssetImage('$pathOrUrl${imageNames[i]}')
                             as ImageProvider,
@@ -159,7 +161,9 @@ class Gallery {
               image: DecorationImage(
                 image: imagesBase64.keys.contains(currentImage)
                     ? MemoryImage(base64Decode(imagesBase64[currentImage]!))
-                    : localOrRemote == 'remote'
+                    : localOrRemote == 'remote' ||
+                            currentImage.startsWith("http://") ||
+                            currentImage.startsWith("https://")
                         ? NetworkImage('$pathOrUrl$currentImage')
                         : AssetImage('$pathOrUrl$currentImage')
                             as ImageProvider,
@@ -209,7 +213,9 @@ class Gallery {
               image: DecorationImage(
                 image: imagesBase64.keys.contains(currentImage)
                     ? MemoryImage(base64Decode(imagesBase64[currentImage]!))
-                    : localOrRemote == 'remote'
+                    : localOrRemote == 'remote' ||
+                            currentImage.startsWith("http://") ||
+                            currentImage.startsWith("https://")
                         ? NetworkImage('$pathOrUrl$currentImage')
                         : AssetImage('$pathOrUrl$currentImage')
                             as ImageProvider,
@@ -256,7 +262,9 @@ class Gallery {
               image: DecorationImage(
                 image: imagesBase64.keys.contains(nextImage)
                     ? MemoryImage(base64Decode(imagesBase64[nextImage]!))
-                    : localOrRemote == 'remote'
+                    : localOrRemote == 'remote' ||
+                            nextImage.startsWith("http://") ||
+                            nextImage.startsWith("https://")
                         ? NetworkImage('$pathOrUrl$nextImage')
                         : AssetImage('$pathOrUrl$nextImage') as ImageProvider,
               ),
@@ -312,7 +320,9 @@ class Gallery {
           image: DecorationImage(
             image: imagesBase64.keys.contains(imageNames.last)
                 ? MemoryImage(base64Decode(imagesBase64[imageNames.last]!))
-                : localOrRemote == 'remote'
+                : localOrRemote == 'remote' ||
+                        imageNames.last.startsWith("http://") ||
+                        imageNames.last.startsWith("https://")
                     ? NetworkImage('$pathOrUrl${imageNames.last}')
                     : AssetImage('$pathOrUrl${imageNames.last}')
                         as ImageProvider,
@@ -411,7 +421,8 @@ class Gallery {
   }
 
   String fixPathOrUrl(String pathOrUrl) {
-    if (pathOrUrl.substring(pathOrUrl.length - 1) != '/') {
+    if (pathOrUrl.isNotEmpty &&
+        pathOrUrl.substring(pathOrUrl.length - 1) != '/') {
       pathOrUrl += '/';
     }
     return pathOrUrl;
